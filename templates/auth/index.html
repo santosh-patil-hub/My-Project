@@ -1,0 +1,118 @@
+{% extends 'layout/base.html' %}
+{% block title %}
+  TODO List
+{% endblock %}
+{% block content %}
+  {% load static %}
+
+  <div id="message-container" class="d-none">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  <div class="container mt-5">
+    <h1 class="text-center todo">Daily Todo List</h1>
+    <div class="row justify-content-center">
+      <div class="col-6">
+        <div class="p-3 bg-warning">
+          <form method="post"
+            action="{% if form.instance.pk %}
+              {% url 'index_with_id' form.instance.pk %}
+            {% else %}
+              {% url 'index' %}
+            {% endif %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="id_title" class="form-label">Title</label>
+              <input type="text" id="id_title" name="title" class="form-control" value="{{ form.title.value }}" />
+            </div>
+
+            <div class="mb-3">
+              <label for="id_desc" class="form-label">Description</label>
+              <input type="text" id="id_desc" name="desc" class="form-control" value="{{ form.desc.value }}" />
+            </div>
+
+            <div class="mb-3">
+              <label for="id_date" class="form-label">Date</label>
+              <input type="datetime-local" id="id_date" name="date" class="form-control" value="{{ form.date.value }}" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              {% if form.instance.pk %}
+                Update Todo
+              {% else %}
+                Add Todo
+              {% endif %}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="descModal" tabindex="-1" aria-labelledby="descModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="descModalLabel"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p id="modalDesc"></p>
+            <p id="modalDate"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <div class="row">
+        <div class="col">
+          <div class="row">
+            {% for todo in todo_list %}
+              <div class="col-md-4 mb-3">
+                <div class="card shadow-lg {% if forloop.first %}highlight-card{% endif %}">
+                  <div class="d-flex justify-content-between me-3">
+                    <h4 class="card-header bg-info">{{ todo.title }}</h4>
+                    <input type="checkbox" class="complate" />
+                  </div>
+                  <div class="card-body bg-dark text-white">
+                    <p class="card-title description" data-bs-toggle="modal" data-bs-target="#descModal" data-bs-title="{{ todo.title }}" data-bs-desc="{{ todo.desc }}" data-bs-date="{{ todo.date }}">{{ todo.desc }}</p>
+                    <p class="card-text text-success">{{ todo.date }}</p>
+                  </div>
+                  <div class="card-footer d-flex justify-content-between">
+                    <a href="{% url 'index_with_id' todo.id %}" class="btn btn-link p-0"><i class="fa-regular fa-pen-to-square text-success"></i></a>
+                    <form method="post" action="{% url 'delete_todo' todo.id %}" class="delete-form">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-link p-0 delete-btn"><i class="fa-solid fa-trash text-danger"></i></button>
+                    </form>
+                  </div>
+                </div>
+
+                {% comment %} <div class="card shadow-lg {% if forloop.first %}highlight-card{% endif %}">
+                  <div class="d-flex">
+                    <h4 class="card-header">{{ todo.title }}</h4>
+                    <input type="checkbox" class="complate" />
+                  </div>
+                  <div class="card-body bg-dark text-white">
+                    <p class="card-title description" data-bs-toggle="modal" data-bs-target="#descModal" data-bs-title="{{ todo.title }}" data-bs-desc="{{ todo.desc }}" data-bs-date="{{ todo.date }}">{{ todo.desc }}</p>
+                    <p class="card-text text-success">{{ todo.date }}</p>
+                  </div>
+                  <div class="card-footer d-flex justify-content-between">
+                    <a href="{% url 'index_with_id' todo.id %}" class="btn btn-link p-0"><i class="fa-regular fa-pen-to-square text-success"></i></a>
+                    <form method="post" action="{% url 'delete_todo' todo.id %}" class="mb-0">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-link p-0"><i class="fa-solid fa-trash text-danger"></i></button>
+                    </form>
+                  </div>
+                </div> {% endcomment %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

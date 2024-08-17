@@ -1,32 +1,20 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    const descModal = document.getElementById('descModal');
-    descModal.addEventListener('show.bs.modal', function (event) {
-        const button = event.relatedTarget; // Button that triggered the modal
-        const desc = button.getAttribute('data-desc'); // Extract info from data-* attributes
-        const modalDesc = document.getElementById('modalDesc');
-        modalDesc.textContent = desc; // Update the modal's content.
-    });
-});
-
-
 $(document).ready(function () {
+    // Modal Handling
     $('.description').click(function () {
-        var cardTitle = $(this).closest('.card').find('.card-header').text();
-        var cardDescription = $(this).text();
+        const cardTitle = $(this).closest('.card').find('.card-header').text();
+        const cardDescription = $(this).data('bs-desc') || $(this).text();
+        const cardDate = $(this).data('bs-date');
 
-        // Set the modal title and description
         $('#descModalLabel').text(cardTitle);
         $('#modalDesc').text(cardDescription);
+        $('#modalDate').text(cardDate);
     });
-});
 
-
-
-$(document).ready(function () {
+    // Display Alerts from Messages
     $('#message-container .alert').each(function () {
-        var message = $(this).text().trim();
-        var type = $(this).hasClass('alert-success') ? 'success' : 'error';
-        var title = type === 'success' ? 'Successfully!' : 'Error!';
+        const message = $(this).text().trim();
+        const type = $(this).hasClass('alert-success') ? 'success' : 'error';
+        const title = type === 'success' ? 'Successfully!' : 'Error!';
 
         Swal.fire({
             title: title,
@@ -35,14 +23,12 @@ $(document).ready(function () {
             confirmButtonText: 'OK'
         });
     });
-});
 
-
-$(document).ready(function () {
+    // Delete Button Confirmation
     $('.delete-btn').on('click', function (event) {
         event.preventDefault(); // Prevent the default form submission
 
-        var $form = $(this).closest('form'); // Find the closest form element
+        const $form = $(this).closest('form'); // Find the closest form element
 
         Swal.fire({
             title: "Are you sure?",
@@ -59,18 +45,15 @@ $(document).ready(function () {
             }
         });
     });
-});
 
-
-
-$(document).ready(function () {
+    // Handle Completion Checkbox
     $(".complate").click(function () {
-        var $checkbox = $(this);
-        var $card = $checkbox.closest('.card');
-        var $header = $card.find(".card-header");
-        var $editButton = $card.find(".fa-pen-to-square").closest('a');
+        const $checkbox = $(this);
+        const $card = $checkbox.closest('.card');
+        const $header = $card.find(".card-header");
+        const $editButton = $card.find(".fa-pen-to-square").closest('a');
 
-        var isChecked = $checkbox.is(':checked');
+        const isChecked = $checkbox.is(':checked');
 
         if (isChecked) {
             Swal.fire({
@@ -101,49 +84,4 @@ $(document).ready(function () {
         }
     });
 });
-
-
-// $(document).ready(function () {
-//     $(".complate").click(function () {
-//         var $card = $(this).closest('.card');
-//         var $header = $card.find(".card-header");
-//         var $editButton = $card.find(".fa-pen-to-square").closest('a');
-
-//         var isChecked = $(this).is(':checked');
-
-//         if (isChecked) {
-//             // Show SweetAlert2 confirmation dialog
-//             Swal.fire({
-//                 title: 'Confirm Completion',
-//                 text: 'Are you sure you want to mark this as complete?',
-//                 icon: 'question',
-//                 showCancelButton: true,
-//                 confirmButtonText: 'Yes, complete it!',
-//                 cancelButtonText: 'No, keep it as is'
-//             }).then((result) => {
-//                 if (result.isConfirmed) {
-//                     // User confirmed the action
-//                     $header.css("text-decoration", "line-through");
-//                     $editButton.css({
-//                         "pointer-events": "none",
-//                         "opacity": "0.5"
-//                     });
-//                 } else {
-//                     // User canceled the action
-//                     $(this).prop('checked', false);  // Uncheck the checkbox
-//                 }
-//             });
-//         } else {
-//             // If checkbox is unchecked, revert the changes
-//             $header.css("text-decoration", "none");
-//             $editButton.css({
-//                 "pointer-events": "auto",
-//                 "opacity": "1"
-//             });
-//         }
-//     });
-// });
-
-
-
 

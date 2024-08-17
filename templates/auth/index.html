@@ -1,7 +1,7 @@
 {% extends 'layout/base.html' %}
 
 {% block title %}
-  TODO List
+  TO DO List
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@
 
   <!-- Main container for the TODO list and form -->
   <div class="container mt-5">
-    <h1 class="text-center todo">Daily Todo List</h1>
+    <h1 class="text-center todo">Daily To do List</h1>
 
     <!-- Form for adding/updating TODOs -->
     <div class="row justify-content-center">
@@ -88,7 +88,7 @@
                     <h4 class="card-header bg-info">{{ todo.title }}</h4>
                     <input type="checkbox" class="complate" />
                   </div>
-                  <div class="card-body  d-flex flex-column">
+                  <div class="card-body d-flex flex-column">
                     <p class="card-title description" data-bs-toggle="modal" data-bs-target="#descModal" data-bs-title="{{ todo.title }}" data-bs-desc="{{ todo.desc }}" data-bs-date="{{ todo.date }}">{{ todo.desc }}</p>
                     <p class="card-text text-success mt-auto">{{ todo.date }}</p>
                   </div>
